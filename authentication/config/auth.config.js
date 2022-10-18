@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "neoforum-secret-key"
-  };
+  secret: "neoforum-secret-key"
+};

@@ -1,28 +1,49 @@
 import React, { Component } from "react";
 import Link from '@mui/material/Link';
+import $ from 'jquery';
+
+import "./style.css";
 
 class HomeContainer extends Component {
     constructor(props) {
         super(props);
 
+        this.user = {
+            username: "",
+            email: "",
+            password: "",
+            pwconfirm: ""
+        };
+
         this.state = {
             errors: {},
-            users: [],
-            user: {
-                username: "GG",
-                email: "",
-                password: "",
-                pwconfirm: ""
-            },
-            btnTxt: "show",
-            type: "password",
-            score: "0",
-            signup: false
         };
     }
 
-    componentDidMount() {
-        this.getListOfUser();
+    async componentDidMount() {
+        await this.getUser();
+        this.initialLoader();
+    }
+
+    initialLoader() {
+        $('body').removeClass('noscroll');
+
+        var container = $('#initial-loader-container');
+        var loadText = `Welcome aboard ${this.user.username}.`;
+        $.each(loadText.split(''), function (i, letter) {
+            setTimeout(function () {
+                $('#loader-text').html($('#loader-text').html() + letter);
+            }, 100 * i);
+        });
+
+        setTimeout(function () {
+            container.animate(
+                {
+                    opacity: 0
+                },
+                2000
+            );
+        }, 3000);
     }
 
     prepareHeaders = () => {
@@ -39,62 +60,44 @@ class HomeContainer extends Component {
         window.location.reload();
     }
 
-    getListOfUser() {
-        fetch('/api/users', {
-            headers: this.prepareHeaders()
-        })
+    getUser() {
+        return new Promise((resolve, reject) => {
+            fetch('/api/user', {
+                headers: this.prepareHeaders()
+            })
             .then(response => response.json())
             .then(data => {
-                if (data.users) {
-                    // Get user index
-                    const toIndex = Math.floor(data.users.length / 2);
-
-                    let userIndex;
-                    Object.values(data.users).forEach((user, index) => {
-                        if (user.username === this.state.user.username) {
-                            userIndex = index;
-                        }
-                    });
-                    const userToReplace = data.users.splice(userIndex, 1)[0];
-                    data.users.splice(toIndex, 0, userToReplace);
-
-                    this.setState(state =>
-                        Object.assign({}, state, {
-                            user: data.user,
-                            users: data.users,
-                        })
-                    );
+                if (data.user) {
+                    this.user = data.user;
                 } else {
+                    // If there a problem with token, the easiest solution is
+                    // to logout. TODO: Improve
+                    if (data.errors[0].name === "NoTokenError" ||
+                        data.errors[0].name === "TokenExpiredError") {
+                        this.logout();
+                    }
+
                     this.setState(state =>
                         Object.assign({}, state, {
                             errors: data.errors
                         })
                     );
                 }
+                resolve();
             })
             .catch(err => {
-                console.log("Error: ", err);
+                reject(err);
             });
+        });
     }
 
     render() {
         return (
             <div>
-                <div className="homeContainer">
-                    <div className="welcomeSentence">
-                        Welcome aboard
+                <div id="initial-loader-container">
+                    <div id="initial-loader" className="padded">
+                        <span id="loader-text"></span>
                     </div>
-                    <div className="usernamesContainer">
-                        {
-                            Object.values(this.state.users).map((user) => {
-                                if (user.username === this.state.user.username) {
-                                    return <div className="ownUsername">{user.username}</div>
-                                }
-                                return <div>{user.username}</div>
-                            })
-                        }
-                    </div>
-                    .
                 </div>
                 <div className="footer">
                     <Link href="https://github.com/thomassimmer/neoforum">

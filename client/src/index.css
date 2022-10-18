@@ -26,3 +26,7 @@ code {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.padded {
+  padding: 3em;
+}

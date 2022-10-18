@@ -1,3 +1,5 @@
 .env
 
 authentication/config/db.config.js
+
+node_modules

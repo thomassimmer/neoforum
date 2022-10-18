@@ -30,23 +30,32 @@ const Role = db.role;
 db.sequelize.sync();
 // Force true will drop tables
 // db.sequelize.sync({ force: true }).then(() => {
-//   console.log('Drop and Resync Db');
-//   initial();
+//     console.log('Drop and Resync Db');
+//     Role.create({
+//         id: 1,
+//         name: "user"
+//     });
+
+//     Role.create({
+//         id: 2,
+//         name: "moderator"
+//     });
+
+//     Role.create({
+//         id: 3,
+//         name: "admin"
+//     });
 // });
 
 // routes
 require('../authentication/routes/auth.routes')(app);
 require('../authentication/routes/user.routes')(app);
 
-app.get('/api/users', isAuthenticated, async (req, res) => {
-    const users = await db.user.findAll({
-        attributes: ['username']
-    });
+app.get('/api/user', isAuthenticated, async (req, res) => {
     if(!req.user){
         return res.json({message:'No user found'})
     }
     res.status(200).send({
-        users: users,
         user: req.user
     });
 });
@@ -60,19 +69,3 @@ app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
 
-function initial() {
-    Role.create({
-        id: 1,
-        name: "user"
-    });
-
-    Role.create({
-        id: 2,
-        name: "moderator"
-    });
-
-    Role.create({
-        id: 3,
-        name: "admin"
-    });
-}

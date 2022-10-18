@@ -51,7 +51,5 @@ class Home extends Component {
 };
 
 root.render(
-    <React.StrictMode>
-        <Home />
-    </React.StrictMode>
+    <Home />
 );
