@@ -29,7 +29,7 @@ class HomeContainer extends Component {
         $('body').removeClass('noscroll');
 
         var container = $('#initial-loader-container');
-        var loadText = `Welcome aboard ${this.user.username}.`;
+        var loadText = `Welcome aboard ${this.user.username}...`;
         $.each(loadText.split(''), function (i, letter) {
             setTimeout(function () {
                 $('#loader-text').html($('#loader-text').html() + letter);
@@ -45,7 +45,7 @@ class HomeContainer extends Component {
             );
             setTimeout(() => {
                 container.remove();
-            })
+            }, 2000);
         }, 3000);
     }
 
