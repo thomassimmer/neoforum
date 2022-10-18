@@ -43,6 +43,9 @@ class HomeContainer extends Component {
                 },
                 2000
             );
+            setTimeout(() => {
+                container.remove();
+            })
         }, 3000);
     }
 
