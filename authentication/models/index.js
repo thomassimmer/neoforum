@@ -1,25 +1,20 @@
-const config = require("../config/db.config.js");
+require('dotenv').config();
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
+  process.env.DATABASE_URL,
   {
-    host: config.HOST,
-    dialect: config.dialect,
-    // operatorsAliases: false,
     dialectOptions: {
       ssl: {
-        require: true, // This will help you. But you will see nwe error
-        rejectUnauthorized: false // This line will fix new error
+        require: true,
+        rejectUnauthorized: false
       }
     },
     pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
     }
   }
 );
