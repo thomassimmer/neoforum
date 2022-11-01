@@ -80,6 +80,7 @@ class LoginContainer extends Component {
         .then(data => {
             if (data.accessToken) {
                 localStorage.token = data.accessToken;
+                localStorage.refreshToken = data.refreshToken;
                 localStorage.isAuthenticated = true;
                 window.location.reload();
             } else {
@@ -95,7 +96,7 @@ class LoginContainer extends Component {
 
     submitSignin(user) {
         var params = { username: user.usr, password: user.pw };
-        fetch('api/auth/signin', {
+        fetch('/api/auth/signin', {
             method: 'POST', 
             mode: 'cors',
             headers: {"Content-Type": "application/json"},
@@ -105,6 +106,7 @@ class LoginContainer extends Component {
         .then(data => {
             if (data.accessToken) {
                 localStorage.token = data.accessToken;
+                localStorage.refreshToken = data.refreshToken;
                 localStorage.isAuthenticated = true;
                 window.location.reload();
             } else {

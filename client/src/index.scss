@@ -20,13 +20,45 @@ code {
     monospace;
 }
 
-.footer {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+footer {
+  position: relative;
+  top: 20px;
+  padding-bottom: 20px;
+  font-size: 20px;
 }
 
 .padded {
   padding: 3em;
 }
+
+#root {
+  width: 100%;
+}
+
+h1 {
+  margin-block-start: 30px;
+}
+
+a {
+    color: #75a7ff;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8080802e;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+

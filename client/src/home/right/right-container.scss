@@ -1,0 +1,40 @@
+#right-container {
+    width: 30%;
+    padding: 20px;
+
+    h1 {
+        font-size: 28px;
+        color: gray;
+    }
+
+    .username-zone {
+        color: white;
+    }
+
+    #logout-link {
+        font-size: 18px;
+        margin-block-start: 38px;
+        color: #75a7ff;
+    }
+
+    #row-hello-logout {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .user-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 40px;
+        border: solid 2px white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+    }
+
+    .username-image-container {
+        display: inline-flex;
+        column-gap: 20px;
+        align-items: end;
+        height: 100%;
+    }
+}
+

@@ -3,21 +3,18 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     font-size: 17px;
     background-color: black;
-    z-index: 1;
+    z-index: 100000000000;
 }
 
 #loader-text {
     color: #1ff042;
     display: block;
-    font-family: 'AndaleMono', monospace;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.9em;
-    letter-spacing: 0.15em;
+    font-family: 'Ubuntu';
+    font-size: 20px;
     text-shadow: 0 0 2px rgba(31, 240, 66, 0.75);
 }
 
@@ -28,15 +25,14 @@
 }
 
 #loader-text:before {
-    content: '> ';
+    content: '>\00a0\00a0\00a0\00a0';
 }
 
 #loader-text:after {
     display: inline-block;
     vertical-align: -0.15em;
-    width: 0.75em;
+    width: 0.5em;
     height: 1em;
-    margin-left: 5px;
     background: #1ff042;
     box-shadow: 1px 1px 1px rgba(31, 240, 66, 0.65), -1px -1px 1px rgba(31, 240, 66, 0.65), 1px -1px 1px rgba(31, 240, 66, 0.65), -1px 1px 1px rgba(31, 240, 66, 0.65);
     -webkit-animation: cursor-blink 1.25s steps(1) infinite;

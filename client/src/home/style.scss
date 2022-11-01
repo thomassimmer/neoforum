@@ -1,0 +1,19 @@
+main:not(.MuiContainer-root) {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.MuiTextField-root label {
+    left: 10px;
+}
+
+.MuiTextField-root input {
+    padding-left: 25px;
+}
+
+.MuiTextField-root .MuiInputBase-root {
+    border-radius: 35px;
+    background-color: rgb(128 128 128 / 8%);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+}

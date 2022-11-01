@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom/client';
 import Link from '@mui/material/Link';
 
-import './index.css';
+import './index.scss';
 
 import LoginContainer from "./authentication/LoginContainer";
 import HomeContainer from "./home/HomeContainer";
@@ -36,9 +36,9 @@ class Home extends Component {
             this.isAuthenticated() ?
                 <HomeContainer />
                 :
-                <div>
+                <div id="disconnected-container">
                     {!this.state.shouldShowSignUpForm && (
-                        <Link onClick={this.showSignUpForm} id='enterButton'>
+                        <Link onClick={this.showSignUpForm} id='enter-button'>
                             ENTER
                         </Link>
                     )}
@@ -53,3 +53,20 @@ class Home extends Component {
 root.render(
     <Home />
 );
+
+const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.isAuthenticated = false;
+    window.location.reload();
+};
+
+const prepareHeaders = () => {
+    if (localStorage.token) {
+        return { 'x-access-token': localStorage.token };
+    } else {
+        return {};
+    }
+}
+
+export { logout, prepareHeaders };

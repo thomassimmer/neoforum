@@ -1,0 +1,55 @@
+#left-container {
+    width: 30%;
+    padding: 20px;
+
+    h1 {
+        font-size: 40px;
+    }
+
+    .search-bar {
+        margin-top: 20px;
+
+
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 2px;
+            font-size: 20px;
+            transition: padding 2s ease-out 100ms;
+            color: gray;
+            cursor: pointer;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+        }
+
+        li:hover,
+        li:focus,
+        li.focus {
+            background-color: #8080802e;
+            padding: 10px 30px;
+            color: white;
+        }
+
+        .number-unread-messages {
+            height: 30px;
+            background-color: red;
+            border-radius: 20px;
+            text-align: center;
+
+            span {
+                color: white;
+                font-size: 16px;
+                margin: auto;
+                padding: 10px;
+                vertical-align: bottom;
+            }
+        }
+    }
+}

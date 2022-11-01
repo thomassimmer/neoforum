@@ -9,7 +9,6 @@ form {
     left: 50%;
     transform: translate(-50%, 20%);
     padding: 20px;
-    /* background-color: white; */
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.4);
 }
 
@@ -55,19 +54,26 @@ form {
     }
 }
 
+#disconnected-container {
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+    align-items: center;
+}
+
 .MuiContainer-root,
 label,
-#enterButton,
+#enter-button,
 input {
     color: white !important;
 }
 
-#enterButton {
+#enter-button {
     font-family: system-ui;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    #enterButton {
+    #enter-button {
         display: inline-block;
         animation: Enter-button-zoom 3s ease-in-out infinite alternate;
 }
