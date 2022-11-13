@@ -15,4 +15,10 @@ module.exports = function (app) {
 
     // DELETE --> Delete channel based on his id
     app.delete('/channels/:channelsId', controller.delete);
+
+    // GET private --> Get conversation of request user with given user
+    app.get('/channels/private/:userId', controller.findPrivateChannelWithUser);
+
+    // GET join --> Join a conversation
+    app.get('/channels/join/:channelId', controller.join);
 };

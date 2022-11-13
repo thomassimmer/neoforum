@@ -53,6 +53,7 @@ app.use(function (req, res, next) {
 });
 
 // routes
+require('./routes/search.routes')(app);
 require('./routes/message.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/channel.routes')(app);

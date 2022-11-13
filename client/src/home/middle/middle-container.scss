@@ -76,11 +76,21 @@
         background: #555555;
     }
 
-    .message-field-container {
+    .message-field-container,
+    .join-channel-container {
         position: absolute;
         bottom: 30px;
         width: -webkit-fill-available;
         margin: 0 20px;
         left: 0;
+    }
+
+    .no-message-yet {
+        font-size: 18px;
+    }
+
+    .join-channel-container {
+        border-radius: 35px;
+        height: 56px;
     }
 }

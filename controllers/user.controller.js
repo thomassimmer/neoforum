@@ -1,10 +1,8 @@
 const db = require("../models");
-const User = db.User;
-
 
 // GET index --> List all users
 exports.findAll = (req, res) => {
-    User.findAll({
+    db.User.findAll({
         include: ["messages", "User_Channels", "favoriteMessages"],
     }).then(users => {
         res.send(users);
@@ -15,7 +13,7 @@ exports.findAll = (req, res) => {
 
 // POST index --> Create new user
 exports.create = (req, res) => {
-    User.create({
+    db.User.create({
         username: req.body.username,
         email: req.body.email,
         password: req.body.password
@@ -30,19 +28,20 @@ exports.create = (req, res) => {
 
 // GET --> Get current user info
 exports.getCurrentUser = (req, res) => {
-    if(!req.userId){
+    if (!req.userId) {
         return res.status(403).json({
             errors: {
                 authentication: ['No user found']
             }
         });
     }
-    User.findByPk(req.userId, {
+    db.User.findByPk(req.userId, {
         include: [
             db.Message,
             {
                 model: db.Channel,
                 include: [
+                    { model: db.User },
                     {
                         model: db.Message,
                         as: "messages",
@@ -69,20 +68,30 @@ exports.getCurrentUser = (req, res) => {
 };
 
 // GET --> Get user based on his id
-exports.findByPk = (req, res) => {
-    User.findByPk(req.params.userId, {
-        include: ["messages", "User_Channels", "favoriteMessages"],
-    }).then(user => {
-        res.send(user);
-    }).catch((err) => {
+exports.findByPk = async (req, res) => {
+    try {
+        const user = await db.User.findByPk(req.params.userId, {
+            include: [
+                {
+                    model: db.Message,
+                    as: "messages",
+                    include: [
+                        { model: db.User, as: "user" },
+                        { model: db.User },
+                    ]
+                }
+            ],
+        })
+        res.status(200).send({ user: user });
+    } catch (err) {
         console.log(">> Error while getting user : ", err);
-    });
+    };
 };
 
 // PUT --> Modify user based on his id
 exports.update = (req, res) => {
     const id = req.params.userId;
-    User.update({ username: req.body.username, email: req.body.email },
+    db.User.update({ username: req.body.username, email: req.body.email },
         { where: { id: req.params.userId } }
     ).then(() => {
         res.status(200).send({ message: 'updated successfully a user with id = ' + id });
@@ -94,7 +103,7 @@ exports.update = (req, res) => {
 // DELETE --> Delete user based on his id
 exports.delete = (req, res) => {
     const id = req.params.userId;
-    User.destroy({
+    db.User.destroy({
         where: { id: id }
     }).then(() => {
         res.status(200).send({ message: 'deleted successfully a user with id = ' + id });

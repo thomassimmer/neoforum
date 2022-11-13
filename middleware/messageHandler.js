@@ -60,6 +60,29 @@ module.exports = (io, socket) => {
         io.emit(`TELL_CLIENTS_MESSAGE_IS_SEEN_${data.messageId}`, { user_message: user_message, user: user });
     });
 
+    socket.on('TELL_SERVER_YOU_JOINED_A_CHANNEL', async (data) => {
+        const users = data.users;
+        const channel = await db.Channel.findByPk(
+            data.channelId, 
+            {
+                include: [
+                    { model: db.User },
+                    {
+                        model: db.Message,
+                        as: "messages",
+                        include: [
+                            { model: db.User, as: "user" },
+                            { model: db.User },
+                        ]
+                    }
+                ],
+            }
+        );
+        for (let user of users) {
+            io.emit(`${user.id}_JOINED_A_CHANNEL`, { channel: channel });
+        }
+    })
+
     socket.on('disconnect', () => {
         console.log('🔥: A user disconnected');
     });

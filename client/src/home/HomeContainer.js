@@ -15,6 +15,45 @@ import RightContainer from "./right/RightContainer";
 
 const io = require("socket.io-client");
 
+const listenForReceivedSignals = (socket, message) => {
+    socket.on(`TELL_CLIENTS_MESSAGE_IS_RECEIVED_${message.id}`, (data) => {
+        const user_message = data.user_message;
+        const user = data.user;
+        user.User_Message = user_message;
+
+        let found = false;
+        message.users.forEach((u) => {
+            if (u.id === user.id) {
+                found = true;
+                u = user;
+            }
+        });
+
+        if (!found) {
+            message.users.push(user);
+        }
+    });
+}
+
+const listenForSeenSignals = (socket, message) => {
+    socket.on(`TELL_CLIENTS_MESSAGE_IS_SEEN_${message.id}`, (data) => {
+        const user_message = data.user_message;
+        const user = data.user;
+        user.User_Message = user_message;
+
+        let found = false;
+        message.users.forEach((u) => {
+            if (u.id === user.id) {
+                found = true;
+                u = user;
+            }
+        });
+
+        if (!found) {
+            message.users.push(user);
+        }
+    });
+}
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -32,11 +71,10 @@ class HomeContainer extends Component {
         this.state = {
             user: "",
             selectedChannel: "",
+            refreshMiddleContainer: true,
             messages: [],
             errors: {},
         };
-
-        this.handleReceiveMessage = this.handleReceiveMessage.bind(this);
 
         this.socket = io("http://localhost:3000");
     }
@@ -60,87 +98,59 @@ class HomeContainer extends Component {
                 }
 
                 // Listen for received signals
-                this.socket.on(`TELL_CLIENTS_MESSAGE_IS_RECEIVED_${message.id}`, (data) => {
-                    const user_message = data.user_message;
-                    const user = data.user;
-                    user.User_Message = user_message;
-
-                    let found = false;
-                    message.users.forEach((u) => {
-                        if (u.id === user.id) {
-                            found = true;
-                            u = user;
-                        }
-                    });
-
-                    if (!found) {
-                        message.users.push(user);
-                    }
-                });
+                listenForReceivedSignals(this.socket, message);
 
                 // Listen for seen signals
-                this.socket.on(`TELL_CLIENTS_MESSAGE_IS_SEEN_${message.id}`, (data) => {
-                    const user_message = data.user_message;
-                    const user = data.user;
-                    user.User_Message = user_message;
+                listenForSeenSignals(this.socket, message);
 
-                    let found = false;
-                    message.users.forEach((u) => {
-                        if (u.id === user.id) {
-                            found = true;
-                            u = user;
-                        }
-                    });
-
-                    if (!found) {
-                        message.users.push(user);
-                    }
-                });
+                // Move the channel to first position
+                const currentIndex = this.channels.findIndex(c => c.id === channel.id);
+                this.channels.splice(currentIndex, 1);
+                this.channels.unshift(channel);
             });
 
             // For already received messages, listen for the received/seen signals
             if (channel.messages) {
                 channel.messages.forEach((message) => {
                     // Listen for received signals
-                    this.socket.on(`TELL_CLIENTS_MESSAGE_IS_RECEIVED_${message.id}`, (data) => {
-                        const user_message = data.user_message;
-                        const user = data.user;
-                        user.User_Message = user_message;
-
-                        let found = false;
-                        message.users.forEach((u) => {
-                            if (u.id === user.id) {
-                                found = true;
-                                u = user;
-                            }
-                        });
-
-                        if (!found) {
-                            message.users.push(user);
-                        }
-                    });
+                    listenForReceivedSignals(this.socket, message);
 
                     // Listen for seen signals
-                    this.socket.on(`TELL_CLIENTS_MESSAGE_IS_SEEN_${message.id}`, (data) => {
-                        const user_message = data.user_message;
-                        const user = data.user;
-                        user.User_Message = user_message;
-
-                        let found = false;
-                        message.users.forEach((u) => {
-                            if (u.id === user.id) {
-                                found = true;
-                                u = user;
-                            }
-                        });
-
-                        if (!found) {
-                            message.users.push(user);
-                        }
-                    });
+                    listenForSeenSignals(this.socket, message);
                 })
             }
-        })
+        });
+
+        this.socket.on(`${this.user.id}_JOINED_A_CHANNEL`, (data) => {
+            const channel = data.channel;
+
+            if (channel) {
+                this.channels.unshift(channel);
+
+                // Listen for new messages
+                this.socket.on(`SEND_MESSAGE_TO_CLIENTS_${channel.id}`, (data) => {
+                    const message = data.message;
+                    message.user = data.user;
+                    message.users = [];
+
+                    // If we don't already have this message, we push it in this.channels
+                    if (!channel.messages.map(m => m.id).includes(message.id)) {
+                        channel.messages.push(message);
+                    }
+
+                    // Listen for received signals
+                    listenForReceivedSignals(this.socket, message);
+
+                    // Listen for seen signals
+                    listenForSeenSignals(this.socket, message);
+
+                    // Move the channel to first position
+                    const currentIndex = this.channels.findIndex(c => c.id === channel.id);
+                    this.channels.splice(currentIndex, 1);
+                    this.channels.unshift(channel);
+                });
+            }
+        });
     }
 
     initialLoader() {
@@ -184,7 +194,8 @@ class HomeContainer extends Component {
                                 // Set the first channel of the list as the selected one.
                                 this.changeChannel(data.user.channels[0], 0);
                                 resolve();
-                            });
+                            }
+                        );
                     } else {
                         // If there a problem with token, the easiest solution is
                         // to logout.
@@ -205,29 +216,55 @@ class HomeContainer extends Component {
         });
     }
 
+    /**
+     * Fetch channel chosen in SearchBar and put it in state.selectedChannel
+     * @param {str} type "channel" or "user"
+     * @param {str} id
+     */
+    showResultDataFromSearchBar = async (type, id) => {
+        const url = type === 'channel' ? `/channels/${id}` : `/channels/private/${id}`;
 
-    changeChannel = (channel) => {
+        let response = await fetch(url, {
+            headers: prepareHeaders(),
+        });
+
+        response = await response.json();
+        let channel = response.channel;
+
+        if (type === 'user') {
+            channel.user = response.user;
+        }
+
+        // We need a refreshSelectedChannel in state here because we are
+        // changing some properties of the selectedChannel.
         this.setState(state =>
             Object.assign({}, state, {
                 selectedChannel: channel,
+                refreshMiddleContainer: !state.refreshMiddleContainer
             })
         );
     }
 
-    handleReceiveMessage(data) {
-        const message = data.message;
-        const messages = this.state.messages;
-        messages.push(message);
+
+    changeChannel = (channel) => {
+        let diplayedChannel = channel;
+
+        // if passed channel is an id
+        if (Number.isInteger(channel)) {
+            this.channels.forEach((c) => {
+                if (c.id === channel) {
+                    diplayedChannel = c;
+                }
+            });
+        }
+
         this.setState(state =>
             Object.assign({}, state, {
-                messages: messages
+                selectedChannel: diplayedChannel,
+                refreshMiddleContainer: !state.refreshMiddleContainer
             })
         );
-
-        // Save message in this.channels
-        const previousIndex = this.channels.findIndex(c => c.id === message.channelId);
-        this.channels.splice(previousIndex, 1, this.state.selectedChannel);
-    };
+    }
 
     render() {
         return (
@@ -237,9 +274,30 @@ class HomeContainer extends Component {
                         <span id="loader-text"></span>
                     </div>
                 </div>
-                <LeftContainer selectedChannel={this.state.selectedChannel} channels={this.channels} user={this.state.user} parentChangeChannel={this.changeChannel} socket={this.socket} />
-                <MiddleContainer key={this.state.selectedChannel.id} channel={this.state.selectedChannel} user={this.state.user} socket={this.socket} />
-                <RightContainer user={this.state.user} />
+                {this.state.user && (
+                    <LeftContainer
+                        selectedChannel={this.state.selectedChannel}
+                        channels={this.channels}
+                        user={this.state.user}
+                        parentChangeChannel={this.changeChannel}
+                        socket={this.socket}
+                        showResultDataFromSearchBar={this.showResultDataFromSearchBar}
+                    />
+                )}
+                {this.state.user && (
+                    <MiddleContainer
+                        key={this.state.refreshMiddleContainer}
+                        channel={this.state.selectedChannel}
+                        changeChannel={this.changeChannel}
+                        user={this.state.user}
+                        socket={this.socket}
+                    />
+                )}
+                {this.state.user && (
+                    <RightContainer
+                        user={this.state.user}
+                    />
+                )}
             </main>
         );
     }

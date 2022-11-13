@@ -9,11 +9,21 @@ class Channel extends Component {
             this.props.channel.messages.forEach((message) => {
                 if (message.users) {
                     message.users.forEach((user) => {
+                        let received = false;
+
                         if (user.id === this.props.user.id) {
+                            received = true;
                             if (!user.User_Message.seen) {
                                 numberUnreadMessages++;
                             }
                         };
+
+                        if (!received) {
+                            this.props.socket.emit('TELL_SERVER_MESSAGE_IS_RECEIVED', {
+                                userId: this.props.user.id,
+                                messageId: message.id
+                            });
+                        }
                     });
                 }
 
@@ -76,9 +86,31 @@ class Channel extends Component {
     }
 
     render() {
+
+        let channelName = '';
+
+        if (this.props.channel.isPrivate) {
+            let userInsidePrivateChannelWithoutMe = [];
+
+            this.props.channel.users.forEach((user) => {
+                if (user.id !== this.props.user.id) {
+                    userInsidePrivateChannelWithoutMe.push(user);
+                }
+            });
+
+            channelName = userInsidePrivateChannelWithoutMe.map(u => u.username).join(', ');
+
+            // If there is no one else, then it's a conversation with myself
+            if (channelName === '') {
+                channelName = 'Me';
+            }
+        } else {
+            channelName = this.props.channel.name;
+        }
+
         return (
             <li key={this.props.listItemIndex} value={this.props.listItemIndex} tabIndex="0" onKeyDown={this.keyDownHandlerForChangingChannel} onClick={this.props.changeChannel} className={this.props.selected ? 'focus' : ''}>
-                <span>{this.props.channel.name}</span>
+                <span>{channelName}</span>
                 {this.state.numberUnreadMessages > 0 && (
                     <div className="number-unread-messages">
                         <span >{this.state.numberUnreadMessages}</span>
