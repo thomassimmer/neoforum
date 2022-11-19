@@ -24,11 +24,11 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 const db = require("./models");
 
-db.sequelize.sync();
+// db.sequelize.sync();
 // Force true will drop tables
-// db.sequelize.sync({ force: true }).then(() => {
-//     require('./models/init')(db);
-// });
+db.sequelize.sync({ force: true }).then(() => {
+    require('./models/init')(db);
+});
 
 
 // Initialize socket events handling

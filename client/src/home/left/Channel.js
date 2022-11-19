@@ -7,9 +7,10 @@ class Channel extends Component {
         let numberUnreadMessages = 0;
         if (this.props.channel.messages) {
             this.props.channel.messages.forEach((message) => {
+                let received = false;
+
                 if (message.users) {
                     message.users.forEach((user) => {
-                        let received = false;
 
                         if (user.id === this.props.user.id) {
                             received = true;
@@ -17,13 +18,14 @@ class Channel extends Component {
                                 numberUnreadMessages++;
                             }
                         };
+                    });
+                }
 
-                        if (!received) {
-                            this.props.socket.emit('TELL_SERVER_MESSAGE_IS_RECEIVED', {
-                                userId: this.props.user.id,
-                                messageId: message.id
-                            });
-                        }
+                if (!received) {
+                    numberUnreadMessages++;
+                    this.props.socket.emit('TELL_SERVER_MESSAGE_IS_RECEIVED', {
+                        userId: this.props.user.id,
+                        messageId: message.id
                     });
                 }
 
@@ -56,7 +58,6 @@ class Channel extends Component {
                 });
 
                 // Start listening for seen signal
-
                 this.props.socket.on(`TELL_CLIENTS_MESSAGE_IS_SEEN_${message.id}`, this.decreaseNumberUnreadWhenMessageSeen);
             }
 

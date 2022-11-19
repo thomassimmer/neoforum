@@ -16,54 +16,70 @@ module.exports = (io, socket) => {
     });
 
     socket.on('TELL_SERVER_MESSAGE_IS_RECEIVED', async (data) => {
-        const user = await db.User.findByPk(data.userId);
-        let user_message = await db.User_Message.findOne({
-            where: {
-                userId: data.userId,
-                messageId: data.messageId
-            }
-        });
-        if (user_message) {
-            user_message.received = true;
-            await user_message.save();
-        } else {
-            user_message = await db.User_Message.create({
-                userId: data.userId,
-                messageId: data.messageId,
-                seen: false,
-                received: true,
+        try {
+            const user = await db.User.findByPk(data.userId);
+            const result = await db.sequelize.transaction(async (t) => {
+                let user_message = await db.User_Message.findOne({
+                    where: {
+                        userId: data.userId,
+                        messageId: data.messageId
+                    },
+                    transaction: t
+                });
+                if (user_message) {
+                    user_message.received = true;
+                    await user_message.save({ transaction: t });
+                } else {
+                    user_message = await db.User_Message.create({
+                        userId: data.userId,
+                        messageId: data.messageId,
+                        seen: false,
+                        received: true,
+                    }, { transaction: t });
+                }
+                return user_message;
             });
+            io.emit(`TELL_CLIENTS_MESSAGE_IS_RECEIVED_${data.messageId}`, { user_message: result, user: user });
+        } catch (error) {
+            console.log(error);
         }
-        io.emit(`TELL_CLIENTS_MESSAGE_IS_RECEIVED_${data.messageId}`, { user_message: user_message, user: user });
     });
 
     socket.on('TELL_SERVER_MESSAGE_IS_SEEN', async (data) => {
-        const user = await db.User.findByPk(data.userId);
-        let user_message = await db.User_Message.findOne({
-            where: {
-                userId: data.userId,
-                messageId: data.messageId
-            }
-        });
-        if (user_message) {
-            user_message.received = true;
-            user_message.seen = true;
-            await user_message.save();
-        } else {
-            user_message = await db.User_Message.create({
-                userId: data.userId,
-                messageId: data.messageId,
-                seen: true,
-                received: true,
+        try {
+            const user = await db.User.findByPk(data.userId);
+            const result = await db.sequelize.transaction(async (t) => {
+                let user_message = await db.User_Message.findOne({
+                    where: {
+                        userId: data.userId,
+                        messageId: data.messageId
+                    },
+                    transaction: t
+                });
+                if (user_message) {
+                    user_message.received = true;
+                    user_message.seen = true;
+                    await user_message.save({ transaction: t });
+                } else {
+                    user_message = await db.User_Message.create({
+                        userId: data.userId,
+                        messageId: data.messageId,
+                        seen: true,
+                        received: true,
+                    }, { transaction: t });
+                }
+                return user_message;
             });
+            io.emit(`TELL_CLIENTS_MESSAGE_IS_SEEN_${data.messageId}`, { user_message: result, user: user });
+        } catch (error) {
+            console.log(error);
         }
-        io.emit(`TELL_CLIENTS_MESSAGE_IS_SEEN_${data.messageId}`, { user_message: user_message, user: user });
     });
 
     socket.on('TELL_SERVER_YOU_JOINED_A_CHANNEL', async (data) => {
         const users = data.users;
         const channel = await db.Channel.findByPk(
-            data.channelId, 
+            data.channelId,
             {
                 include: [
                     { model: db.User },
