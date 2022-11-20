@@ -1,6 +1,30 @@
+@mixin object-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+$circleSize: 60px;
+$radius: 40px;
+$shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+
 #right-container {
     width: 30%;
     padding: 20px;
+
+    .open {
+        display: block;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .close-right-container-btn {
+            display: none;
+        }
+    }
 
     h1 {
         font-size: 28px;
@@ -13,8 +37,8 @@
 
     #logout-link {
         font-size: 18px;
-        margin-block-start: 38px;
         color: #75a7ff;
+        text-align: center;
     }
 
     #row-hello-logout {
@@ -22,19 +46,89 @@
         justify-content: space-between;
     }
 
-    .user-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 40px;
-        border: solid 2px white;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+    .username-image-container {
+        display: flex;
+        column-gap: 20px;
     }
 
-    .username-image-container {
-        display: inline-flex;
-        column-gap: 20px;
-        align-items: flex-end;
-        height: 100%;
+    .profile-pic {
+        transition: all .3s ease;
+        @include object-center;
+        position: relative;
+        transition: all .3s ease;
+
+        input {
+            display: none;
+        }
+
+        .user-image {
+            position: absolute;
+            object-fit: cover;
+            width: $circleSize;
+            height: $circleSize;
+            box-shadow: $shadow;
+            border-radius: $radius;
+            z-index: 0;
+            border: solid 2px white;
+        }
+
+        label {
+            cursor: pointer;
+            height: $circleSize;
+            width: $circleSize;
+
+            span {
+                font-size: 0;
+            }
+        }
+
+        &:hover {
+            label {
+                @include object-center;
+                background-color: rgba(0, 0, 0, .8);
+                z-index: 10000;
+                transition: background-color .2s ease-in-out;
+                border-radius: $radius;
+                margin-bottom: 0;
+
+                span {
+                    font-size: 10px;
+                    text-align: center;
+                }
+            }
+        }
     }
 }
 
+@media screen and (max-width: 1000px) {
+    #right-container {
+        display: none;
+        position: absolute;
+        width: auto;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #282c34 !important;
+
+        header .close-right-container-btn {
+            display: block;
+        }
+
+        .username-image-container {
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    }
+
+    #right-container.open {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 1180px) {
+    #row-hello-logout {
+        flex-direction: column;
+    }
+}

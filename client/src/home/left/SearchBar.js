@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import $ from 'jquery';
 
 import useFetch from "../../hooks/useFetch";
 
@@ -19,6 +20,7 @@ const SearchBar = ({ showResultDataFromSearchBar }) => {
             await showResultDataFromSearchBar('user', userId);
         }
         setData({ ...data, slug: '' });
+        $('#left-container').removeClass('open');
     }
 
     const keyDownHandlerForChangingChannel = (event) => {

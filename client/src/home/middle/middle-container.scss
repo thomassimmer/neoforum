@@ -5,6 +5,27 @@
     border-right: solid gray 1px;
     border-left: solid gray 1px;
 
+    header {
+
+        .open-left-container-btn,
+        .open-right-container-btn {
+            display: none;
+        }
+
+        .user-image-container {
+            height: 44px;
+        }
+
+        .user-image {
+            width: 40px;
+            height: 40px;
+        }
+
+        h1 {
+            margin-block-start: revert;
+        }
+    }
+
     h1 {
         font-size: 30px;
         text-align: center;
@@ -80,9 +101,10 @@
     .join-channel-container {
         position: absolute;
         bottom: 30px;
+        left: 20px;
+        right: 20px;
         width: -webkit-fill-available;
-        margin: 0 20px;
-        left: 0;
+        width: -moz-available;
     }
 
     .no-message-yet {
@@ -92,5 +114,29 @@
     .join-channel-container {
         border-radius: 35px;
         height: 56px;
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+    #middle-container {
+        width: auto;
+        z-index: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .open-left-container-btn,
+        header .open-right-container-btn {
+            display: block;
+        }
     }
 }

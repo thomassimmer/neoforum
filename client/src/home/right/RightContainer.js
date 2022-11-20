@@ -1,30 +1,62 @@
 import React, { Component } from "react";
 import Link from '@mui/material/Link';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from '@mui/icons-material/Close';
+import $ from 'jquery';
 
-import { logout } from "../../index";
+import { logout, prepareHeaders } from "../../index";
+
 
 class RightContainer extends Component {
 
+    componentDidMount() {
+        $('.close-right-container-btn').on('click', () => {
+            $('#right-container').removeClass('open');
+        })
+    }
+
     render() {
+
+        const loadFile = async (event) => {
+            const files = event.target.files
+            const data = new FormData()
+            data.append('image', files[0])
+
+            const headers = prepareHeaders();
+            const result = await fetch('/user/upload/img/', {
+                method: 'POST',
+                headers: headers,
+                body: data,
+            });
+
+            if (result.ok) {
+                window.location.reload();
+            }
+        };
+
         return (
             <div id="right-container">
-                <div id="row-hello-logout">
+                <header id="row-hello-logout">
+                    <IconButton className="close-right-container-btn">
+                        <CloseIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
                     <div className="username-image-container">
                         <h1>Hello <span className="username-zone">{this.props.user.username}</span></h1>
-                        <a href="/">
-                            {this.props.user.image && (
-                                <img src={this.props.user.image} alt='' className="user-image"></img>
-                            )}
-                            {!this.props.user.image && (
-                                <AccountCircleIcon className="user-image" />
-                            )}
-                        </a>
+                        <div className="profile-pic">
+                            <label htmlFor="file">
+                                <span>Change image</span>
+                            </label>
+                            <input id="file" type="file" onChange={loadFile} />
+                            {this.props.user.image
+                                ? <img src={this.props.user.image} alt='' className="user-image"></img>
+                                : <img src='default-user-img.png' alt='' className="user-image"></img>
+                            }
+                        </div>
                     </div>
                     <Link id="logout-link" href='#' onClick={logout} tabIndex="0">
                         Log out
                     </Link>
-                </div>
+                </header>
             </div>
         );
     }

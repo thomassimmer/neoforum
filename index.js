@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require("express");
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -22,13 +23,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
+app.use(
+    fileUpload({
+        useTempFiles: true,
+        safeFileNames: true,
+        preserveExtension: true,
+        tempFileDir: `${__dirname}/public/files/temp`,
+        limits: {
+            fileSize: 10000000,  // 10 mb max.
+        },
+        abortOnLimit: true,
+    })
+);
+
 const db = require("./models");
 
-// db.sequelize.sync();
+db.sequelize.sync();
 // Force true will drop tables
-db.sequelize.sync({ force: true }).then(() => {
-    require('./models/init')(db);
-});
+// db.sequelize.sync({ force: true }).then(() => {
+//     require('./models/init')(db);
+// });
 
 
 // Initialize socket events handling

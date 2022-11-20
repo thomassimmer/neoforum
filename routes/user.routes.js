@@ -18,4 +18,7 @@ module.exports = function (app) {
 
     // DELETE --> Delete user based on his id
     app.delete('/users/:usersId', controller.delete);
+
+    // UPLOAD IMAGE
+    app.post('/user/upload/img/', controller.uploadImage);
 };

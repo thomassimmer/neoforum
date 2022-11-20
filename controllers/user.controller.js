@@ -111,3 +111,22 @@ exports.delete = (req, res) => {
         console.log(">> Error while deleting user : ", err);
     });
 };
+
+exports.uploadImage = async (req, res) => {
+    const { image } = req.files;
+
+    if (!image) return res.sendStatus(400);
+
+    // If does not have image mime type prevent from uploading
+    if (!/^image/.test(image.mimetype)) return res.sendStatus(400);
+
+    let uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+    image.mv(__dirname + '/../client/public/upload/' + uniqueId);
+
+    const user = await db.User.findByPk(req.userId);
+    user.image = 'upload/' + uniqueId;
+    await user.save();
+
+    res.sendStatus(200);
+}

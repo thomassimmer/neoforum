@@ -69,7 +69,10 @@ class Message extends Component {
         return (
             <li className="message">
                 <a href="/" className="user-image-container">
-                    <img src={this.props.message.user.image} alt='' className="user-image"></img>
+                    {this.props.message.user.image
+                        ? <img src={this.props.message.user.image} alt='' className="user-image"></img>
+                        : <img src='default-user-img.png' alt='' className="user-image"></img>
+                    }
                 </a>
                 <div>
                     <a href="/" className="user-username">{this.props.message.user.username}</a>

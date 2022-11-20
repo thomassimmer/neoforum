@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from '@mui/icons-material/Close';
 import $ from 'jquery';
 
 import Channel from "./Channel";
@@ -35,24 +37,40 @@ class LeftContainer extends Component {
         });
     }
 
+    componentDidMount() {
+        $('.close-left-container-btn').on('click', () => {
+            $('#left-container').removeClass('open');
+        })
+    }
+
     changeChannel = (event) => {
-        const channel = this.state.channels[event.target.value];
+        const channel = this.state.channels[event.currentTarget.value];
         this.props.parentChangeChannel(channel);
-        if (this.lastFocusedElement)
+
+        if (this.lastFocusedElement) {
             $(`li[value=${this.lastFocusedElement}]`).removeClass('focus');
-        $(event.target).addClass('focus');
-        this.lastFocusedElement = event.target.value;
+        }
+
+        $(event.currentTarget).addClass('focus');
+        this.lastFocusedElement = event.currentTarget.value;
+
+        $('#left-container').removeClass('open');
     }
 
     render() {
         return (
             <div id="left-container">
-                <h1>Channels</h1>
+                <header>
+                    <h1>Channels</h1>
+                    <IconButton className="close-left-container-btn">
+                        <CloseIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
+                </header>
                 <SearchBar
                     showResultDataFromSearchBar={this.props.showResultDataFromSearchBar}
                 />
                 <ul id="subscribed-channels">
-                    {this.state.channels.map((channel, index) => {
+                    {this.state.channels && this.props.selectedChannel && this.state.channels.map((channel, index) => {
                         const shouldBeFocused = this.props.selectedChannel.id === channel.id;
                         if (shouldBeFocused)
                             this.lastFocusedElement = index;

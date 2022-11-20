@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import $ from 'jquery';
 
 class Channel extends Component {
     constructor(props) {
@@ -64,6 +65,14 @@ class Channel extends Component {
         });
     }
 
+    componentDidMount() {
+        const changeChannel = this.props.changeChannel;
+        $('#subscribed-channels li').each(function(i, element) {
+            $(element).off('click', changeChannel);
+            $(element).on('click', changeChannel);
+        })
+    }
+
     decreaseNumberUnreadWhenMessageSeen = (data) => {
         const user = data.user;
 
@@ -78,12 +87,6 @@ class Channel extends Component {
             this.props.socket.off(`TELL_CLIENTS_MESSAGE_IS_SEEN_${data.user_message.messageId}`, this.decreaseNumberUnreadWhenMessageSeen);
         }
 
-    }
-
-    keyDownHandlerForChangingChannel = (event) => {
-        if (event.code === "Enter" || event.code === "NumpadEnter") {
-            this.props.changeChannel(event);
-        }
     }
 
     render() {
@@ -110,7 +113,7 @@ class Channel extends Component {
         }
 
         return (
-            <li key={this.props.listItemIndex} value={this.props.listItemIndex} tabIndex="0" onKeyDown={this.keyDownHandlerForChangingChannel} onClick={this.props.changeChannel} className={this.props.selected ? 'focus' : ''}>
+            <li key={this.props.listItemIndex} value={this.props.listItemIndex} tabIndex="0" className={this.props.selected ? 'focus' : ''}>
                 <span>{channelName}</span>
                 {this.state.numberUnreadMessages > 0 && (
                     <div className="number-unread-messages">

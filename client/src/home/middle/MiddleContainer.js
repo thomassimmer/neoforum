@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import SendIcon from '@mui/icons-material/Send';
+import SearchIcon from "@mui/icons-material/Search";
+
 import $ from "jquery";
 
 import Message from './Message';
@@ -46,6 +48,14 @@ class MiddleContainer extends Component {
 
     componentDidMount() {
         this.setScrollToBottom();
+
+        $('.open-left-container-btn').on('click', () => {
+            $('#left-container').addClass('open');
+        })
+
+        $('.open-right-container-btn').on('click', () => {
+            $('#right-container').addClass('open');
+        })
     };
 
     componentDidUpdate() {
@@ -132,7 +142,15 @@ class MiddleContainer extends Component {
 
         return (
             <div id="middle-container">
-                <h1>{channelName}</h1>
+                <header>
+                    <IconButton className="open-left-container-btn">
+                        <SearchIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
+                    <h1>{channelName}</h1>
+                    <div className="user-image-container open-right-container-btn">
+                        <img src={this.props.user.image} alt='' className="user-image"></img>
+                    </div>
+                </header>
                 {this.state.messages.length > 0 ?
                     <ul className="list-message">
                         {this.state.messages.map((message, index) => <Message key={index} message={message} user={this.props.user} socket={this.props.socket} />)}
@@ -144,7 +162,6 @@ class MiddleContainer extends Component {
                     <TextField
                         id="message-field"
                         label="Send a message"
-                        fullWidth
                         variant="outlined"
                         className="message-field-container"
                         value={this.state.message}

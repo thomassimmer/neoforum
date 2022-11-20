@@ -2,21 +2,32 @@
     position: relative;
     width: 30%;
     padding: 20px;
+    min-width: 310px;
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .close-left-container-btn {
+            display: none;
+        }
+    }
 
     h1 {
-        font-size: 40px;
+        font-size: 30px;
     }
 
     .search-bar {
         position: relative;
         z-index: 1;
-        margin-top: 20px;
+        margin-top: 30px;
     }
 
     ul#subscribed-channels {
         position: absolute;
         z-index: 0;
-        top: 180px;
+        top: 200px;
         left: 20px;
         right: 20px;
     }
@@ -104,5 +115,27 @@
                 transform: rotate(360deg);
             }
         }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #left-container {
+        display: none;
+        position: absolute;
+        width: auto;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #282c34 !important;
+
+        header .close-left-container-btn {
+            display: block;
+            height: 41px;
+        }
+    }
+
+    #left-container.open {
+        display: block;
     }
 }

@@ -76,7 +76,7 @@ class HomeContainer extends Component {
             errors: {},
         };
 
-        this.socket = io("http://localhost:3000");
+        this.socket = io("/");
     }
 
     async componentDidMount() {
