@@ -107,11 +107,12 @@ const SignInForm = ({
                             </Button>
                             </Grid>
                             <Grid container>
-                                <Grid item xs>
+                                {/* TODO */}
+                                {/* <Grid item xs>
                                     <Link href="#" variant="body2">
                                         Forgot password?
                                     </Link>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item>
                                     <Link onClick={switchForm} variant="body2">
                                         {"Don't have an account? Sign Up"}
