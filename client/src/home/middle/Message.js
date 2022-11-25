@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import $ from 'jquery';
+
+import MessageOptions from "./MessageOptions";
+
 
 class Message extends Component {
     constructor(props) {
@@ -21,6 +25,7 @@ class Message extends Component {
             content: this.props.message.content,
             seen: this.seen,
             received: this.received,
+            optionsAreVisible: false,
         }
     }
 
@@ -66,6 +71,27 @@ class Message extends Component {
     };
 
     render() {
+        const showOptions = (e) => {
+            this.setState(state =>
+                Object.assign({}, state, {
+                    optionsAreVisible: true,
+                })
+            );
+
+            setTimeout(() => {
+                $(window).on('click', hideOptions);
+            }, 10);
+        }
+
+        const hideOptions = () => {
+            this.setState(state =>
+                Object.assign({}, state, {
+                    optionsAreVisible: false,
+                })
+            );
+            $(window).off('click', hideOptions);
+        };
+
         return (
             <li className="message">
                 <a href="/" className="user-image-container">
@@ -78,7 +104,8 @@ class Message extends Component {
                     <a href="/" className="user-username">{this.props.message.user.username}</a>
                 </div>
                 <span className="message-content">{this.state.content}</span>
-                <MoreHorizIcon className="message-options" />
+                <MoreHorizIcon className={`message-options${this.state.optionsAreVisible ? ' focus' : ''}`} onClick={showOptions} />
+                {this.state.optionsAreVisible ? <MessageOptions /> : null}
                 {/* Add somewhere seen/received info */}
             </li>
         );

@@ -4,6 +4,7 @@
     padding: 20px;
     border-right: solid gray 1px;
     border-left: solid gray 1px;
+    box-shadow: rgb(0 0 0 / 24%) -5px 0px 10px, rgb(0 0 0 / 24%) 5px 0px 10px;
 
     header {
 
@@ -39,6 +40,7 @@
     }
 
     .message {
+        position: relative;
         list-style: none;
         background-color: #80808061;
         margin: 20px;
@@ -93,7 +95,8 @@
     }
 
     .message-options:focus,
-    .message-options:hover {
+    .message-options:hover,
+    .message-options.focus {
         background: #555555;
     }
 
@@ -114,6 +117,27 @@
     .join-channel-container {
         border-radius: 35px;
         height: 56px;
+    }
+
+    .message-options-list {
+        position: absolute;
+        right: 15px;
+        top: 40px;
+        background-color: #555555;
+        border-radius: 5px;
+        width: 100px;
+        padding: 5px;
+        list-style: none;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+
+        li {
+            padding: 7px;
+
+            &:hover {
+                background-color: #353535;   
+                border-radius: 5px;
+            }
+        }
     }
 }
 
