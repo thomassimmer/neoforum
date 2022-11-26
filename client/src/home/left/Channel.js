@@ -5,6 +5,7 @@ class Channel extends Component {
     constructor(props) {
         super(props);
 
+        // Count unread messages and emit "received" signals
         let numberUnreadMessages = 0;
         if (this.props.channel.messages) {
             this.props.channel.messages.forEach((message) => {
@@ -22,7 +23,8 @@ class Channel extends Component {
                     });
                 }
 
-                if (!received) {
+                // For the selected channel, we already send "seen" signals from the Message component.
+                if (!received && !this.props.selected) {
                     numberUnreadMessages++;
                     this.props.socket.emit('TELL_SERVER_MESSAGE_IS_RECEIVED', {
                         userId: this.props.user.id,
@@ -65,14 +67,6 @@ class Channel extends Component {
         });
     }
 
-    componentDidMount() {
-        const changeChannel = this.props.changeChannel;
-        $('#subscribed-channels li').each(function(i, element) {
-            $(element).off('click', changeChannel);
-            $(element).on('click', changeChannel);
-        })
-    }
-
     decreaseNumberUnreadWhenMessageSeen = (data) => {
         const user = data.user;
 
@@ -113,11 +107,17 @@ class Channel extends Component {
         }
 
         return (
-            <li key={this.props.listItemIndex} value={this.props.listItemIndex} tabIndex="0" className={this.props.selected ? 'focus' : ''}>
+            <li
+                key={this.props.listItemIndex}
+                value={this.props.listItemIndex}
+                tabIndex="0"
+                className={this.props.selected ? 'focus' : ''}
+                onClick={this.props.changeChannel}
+            >
                 <span>{channelName}</span>
                 {this.state.numberUnreadMessages > 0 && (
                     <div className="number-unread-messages">
-                        <span >{this.state.numberUnreadMessages}</span>
+                        <span>{this.state.numberUnreadMessages}</span>
                     </div>
                 )}
             </li>

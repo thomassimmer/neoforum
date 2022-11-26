@@ -70,11 +70,23 @@ class Message extends Component {
         });
     };
 
+    deleteMessage = () => {
+        // Pass token too so we can check in back that it's the actual author
+        // who is deleting.
+        this.props.socket.emit('TELL_SERVER_DELETE_MESSAGE', {
+            userId: this.props.user.id,
+            messageId: this.props.message.id,
+            token: localStorage.token,
+        });
+    }
+
     render() {
         const showOptions = (e) => {
+            e.stopPropagation();
+
             this.setState(state =>
                 Object.assign({}, state, {
-                    optionsAreVisible: true,
+                    optionsAreVisible: !state.optionsAreVisible,
                 })
             );
 
@@ -83,33 +95,51 @@ class Message extends Component {
             }, 10);
         }
 
-        const hideOptions = () => {
-            this.setState(state =>
-                Object.assign({}, state, {
-                    optionsAreVisible: false,
-                })
-            );
-            $(window).off('click', hideOptions);
+        const hideOptions = (e) => {
+            if (!$(e.target).parent('ul.message-options-list').length) {
+                this.setState(state =>
+                    Object.assign({}, state, {
+                        optionsAreVisible: false,
+                    })
+                );
+                $(window).off('click', hideOptions);
+            }
         };
 
-        return (
-            <li className="message">
-                <a href="/" className="user-image-container">
-                    {this.props.message.user.image
-                        ? <img src={this.props.message.user.image} alt='' className="user-image"></img>
-                        : <img src='default-user-img.png' alt='' className="user-image"></img>
-                    }
-                </a>
-                <div>
-                    <a href="/" className="user-username">{this.props.message.user.username}</a>
-                </div>
-                <span className="message-content">{this.state.content}</span>
-                <MoreHorizIcon className={`message-options${this.state.optionsAreVisible ? ' focus' : ''}`} onClick={showOptions} />
-                {this.state.optionsAreVisible ? <MessageOptions /> : null}
-                {/* Add somewhere seen/received info */}
-            </li>
-        );
-    };
+        if (this.props.message.deleted || !this.props.message.user) {
+            return <li className="deleted-message">Message deleted by its user.</li>;
+        } else {
+            return (
+                <li className="message">
+                    {/* TODO : Redirect toward conversation with this user */}
+                    <a href="#" className="user-image-container">
+                        {this.props.message.user.image
+                            ? <img src={this.props.message.user.image} alt='' className="user-image"></img>
+                            : <img src='default-user-img.png' alt='' className="user-image"></img>
+                        }
+                    </a>
+                    <div>
+                        {/* TODO : Redirect toward conversation with this user */}
+                        <a href="#" className="user-username">{this.props.message.user.username}</a>
+                    </div>
+                    <span className="message-content">{this.state.content}</span>
+                    <MoreHorizIcon
+                        tabIndex="0"
+                        className={`message-options${this.state.optionsAreVisible ? ' focus' : ''}`}
+                        onClick={showOptions}
+                        onKeyDown={showOptions}
+                    />
+                    {this.state.optionsAreVisible
+                        ? <MessageOptions
+                            user={this.props.user}
+                            message={this.props.message}
+                            seen={this.state.seen}
+                            received={this.state.received}
+                            deleteMessage={this.deleteMessage} />
+                        : null}
+                </li>
+            );
+        }
+    }
 }
-
 export default Message;

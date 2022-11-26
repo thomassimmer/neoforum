@@ -18,10 +18,3 @@ main:not(.MuiContainer-root) {
     background-color: rgb(128 128 128 / 8%);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
 }
-
-.MuiFormControl-root.MuiTextField-root {
-    border-radius: 35px;
-    background-color: rgb(56, 59, 66);
-    box-shadow: rgb(0 0 0 / 24%) 0px 1px 5px;
-    z-index: 1;
-}

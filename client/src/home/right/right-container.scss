@@ -9,8 +9,10 @@ $radius: 40px;
 $shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
 
 #right-container {
+    position: relative;
     width: 30%;
     padding: 20px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 0px 10px;
 
     .open {
         display: block;
@@ -38,6 +40,17 @@ $shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
     #logout-link {
         font-size: 18px;
         color: #75a7ff;
+        text-align: center;
+    }
+
+    #delete-account-link {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        color: #75a7ff;
+        width: 100%;
         text-align: center;
     }
 

@@ -3,6 +3,7 @@ const express = require("express");
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const authJwt = require('./middleware/authJwt');
 
 const PORT = process.env.PORT || 3001;
 
@@ -63,7 +64,7 @@ app.use(function (req, res, next) {
         "Access-Control-Allow-Headers",
         "x-access-token, Origin, Content-Type, Accept"
     );
-    verifyToken(req, res, next);
+    authJwt.verifyToken(req, res, next);
 });
 
 // routes

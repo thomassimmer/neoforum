@@ -124,6 +124,7 @@ const SignUpForm = ({
                                     helperText={errors.pwconfirm}
                                 />
                             </Grid>
+                            {/* TODO when we can send emails. */}
                             {/* <Grid item xs={12}>
                                 <FormControlLabel
                                     control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -137,7 +138,7 @@ const SignUpForm = ({
                             className="signUpSubmit"
                             fullWidth
                             variant="contained"
-                            primary={true}
+                            primary="true"
                             sx={{ mt: 3, mb: 2 }}
                         >
                             Sign Up

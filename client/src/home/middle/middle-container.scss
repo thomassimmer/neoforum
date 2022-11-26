@@ -4,7 +4,7 @@
     padding: 20px;
     border-right: solid gray 1px;
     border-left: solid gray 1px;
-    box-shadow: rgb(0 0 0 / 24%) -5px 0px 10px, rgb(0 0 0 / 24%) 5px 0px 10px;
+    box-shadow: rgb(0 0 0 / 25%) -3px 0px 10px, rgb(0 0 0 / 25%) 3px 0px 10px;
 
     header {
 
@@ -46,7 +46,7 @@
         margin: 20px;
         border-radius: 10px;
         padding: 20px 40px 20px 20px;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        box-shadow: rgb(0 0 0 / 25%) 0px 3px 8px;
         font-size: 16px;
         white-space: pre-line;
         display: grid;
@@ -65,7 +65,7 @@
         height: 60px;
         border-radius: 40px;
         border: solid 2px white;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+        box-shadow: rgb(0 0 0 / 25%) 0px 1px 5px;
     }
 
     .user-username {
@@ -90,7 +90,7 @@
         position: relative;
         bottom: 10px;
         width: 35px;
-        background: #6a6a6a;
+        color: gray;
         border-radius: 40px;
     }
 
@@ -98,6 +98,7 @@
     .message-options:hover,
     .message-options.focus {
         background: #555555;
+        color: white;
     }
 
     .message-field-container,
@@ -119,25 +120,57 @@
         height: 56px;
     }
 
-    .message-options-list {
-        position: absolute;
-        right: 15px;
-        top: 40px;
-        background-color: #555555;
-        border-radius: 5px;
-        width: 100px;
-        padding: 5px;
+    .deleted-message {
         list-style: none;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+        background-color: rgba(128, 128, 128, 0.3803921569);
+        margin: 20px;
+        border-radius: 10px;
+        padding: 20px 40px 20px 20px;
+        box-shadow: rgb(0 0 0 / 25%) 0px 3px 8px;
+        font-size: 16px;
+    }
 
-        li {
-            padding: 7px;
+    .element-with-tooltip {
+        position: relative;
+    }
 
-            &:hover {
-                background-color: #353535;   
-                border-radius: 5px;
-            }
-        }
+    .element-with-tooltip .tooltip {
+        visibility: hidden;
+        width: 150px;
+        background-color: #353535;
+        color: #fff;
+        text-align: center;
+        padding: 7px;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -174px;
+        list-style: none;
+
+        /* Fade in tooltip */
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    /* Tooltip arrow */
+    .element-with-tooltip .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translate(50%, -50%);
+        right: 0;
+        margin-right: -12px;
+        border: 15px solid;
+        border-color: transparent transparent transparent #353535;
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .element-with-tooltip:hover .tooltip,
+    .element-with-tooltip:focus .tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 }
 
@@ -161,6 +194,28 @@
         header .open-left-container-btn,
         header .open-right-container-btn {
             display: block;
+        }
+    }
+}
+
+.message-options-list {
+    position: absolute;
+    right: 15px;
+    top: 40px;
+    background-color: #555555;
+    border-radius: 5px;
+    width: 100px;
+    padding: 5px;
+    list-style: none;
+    box-shadow: rgb(0 0 0 / 25%) 0px 1px 5px;
+
+    li {
+        padding: 7px;
+        cursor: pointer;;
+
+        &:hover {
+            background-color: #353535;
+            border-radius: 5px;
         }
     }
 }

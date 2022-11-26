@@ -80,7 +80,7 @@ class LeftContainer extends Component {
                             channel={channel}
                             user={this.props.user}
                             changeChannel={this.changeChannel}
-                            onClick={this.changeChannel}
+                            // onClick={this.changeChannel}
                             selected={shouldBeFocused}
                             socket={this.props.socket}
                         />;

@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
         attachment: {
             type: Sequelize.STRING,
         },
+        deleted: {
+            type: Sequelize.BOOLEAN,
+        }
     });
     return Message;
 };

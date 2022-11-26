@@ -3,6 +3,7 @@
     width: 30%;
     padding: 20px;
     min-width: 310px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 0px 10px;
 
     header {
         display: flex;
@@ -115,6 +116,13 @@
                 transform: rotate(360deg);
             }
         }
+    }
+
+    .MuiFormControl-root.MuiTextField-root {
+        border-radius: 35px;
+        background-color: rgb(56, 59, 66);
+        box-shadow: rgb(0 0 0 / 24%) 0px 1px 5px;
+        z-index: 1;
     }
 }
 

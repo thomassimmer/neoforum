@@ -44,6 +44,28 @@ class MiddleContainer extends Component {
                 })
             );
         });
+
+        this.props.socket.on(`TELL_CLIENTS_MESSAGE_IS_DELETED_${this.props.channel.id}`, (data) => {
+            const markMessageAsDelete = (m) => {
+                if (m.id === data.messageId) {
+                    m.deleted = true;
+                    m.content = null;
+                    m.user = null;
+                    m.attachment = null;
+                }
+            };
+            const channel = this.state.channel;
+            channel.messages.forEach(markMessageAsDelete);
+            const messages = this.state.messages;
+            messages.forEach(markMessageAsDelete);
+
+            this.setState(state =>
+                Object.assign({}, state, {
+                    messages: messages,
+                    channel: channel,
+                })
+            );
+        });
     }
 
     componentDidMount() {
@@ -76,6 +98,7 @@ class MiddleContainer extends Component {
                 content: this.state.message,
                 userId: this.props.user.id,
                 channelId: this.state.channel.id,
+                token: localStorage.token,
             });
         }
         this.setState(state =>
@@ -153,7 +176,9 @@ class MiddleContainer extends Component {
                 </header>
                 {this.state.messages.length > 0 ?
                     <ul className="list-message">
-                        {this.state.messages.map((message, index) => <Message key={index} message={message} user={this.props.user} socket={this.props.socket} />)}
+                        {this.state.messages.map((message, index) => {
+                            return <Message key={index} message={message} user={this.props.user} socket={this.props.socket} />;
+                        })}
                     </ul>
                     :
                     <div className="no-message-yet">No message yet in here...</div>

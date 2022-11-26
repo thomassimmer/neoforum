@@ -15,6 +15,20 @@ class RightContainer extends Component {
         })
     }
 
+    deleteAccount = async () => {
+        if (window.confirm('Do you really want to delete your account ? This action is irreversible.')) {
+            const headers = prepareHeaders();
+            const result = await fetch(`/users/${this.props.user.id}`, {
+                method: "DELETE",
+                headers: headers,
+            });
+
+            if (result.ok) {
+                window.location.reload();
+            }
+        }
+    }
+
     render() {
 
         const loadFile = async (event) => {
@@ -57,6 +71,9 @@ class RightContainer extends Component {
                         Log out
                     </Link>
                 </header>
+                <Link id="delete-account-link" href='#' onClick={this.deleteAccount} tabIndex="0">
+                    Delete my account
+                </Link>
             </div>
         );
     }

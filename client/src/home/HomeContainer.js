@@ -119,6 +119,19 @@ class HomeContainer extends Component {
                     listenForSeenSignals(this.socket, message);
                 })
             }
+
+            // Listen for message delete signals
+            this.socket.on(`TELL_CLIENTS_MESSAGE_IS_DELETED_${channel.id}`, (data) => {
+                const markMessageAsDelete = (m) => {
+                    if (m.id === data.messageId) {
+                        m.deleted = true;
+                        m.content = null;
+                        m.user = null;
+                        m.attachment = null;
+                    }
+                };
+                channel.messages.forEach(markMessageAsDelete);
+            });
         });
 
         this.socket.on(`${this.user.id}_JOINED_A_CHANNEL`, (data) => {
@@ -148,6 +161,19 @@ class HomeContainer extends Component {
                     const currentIndex = this.channels.findIndex(c => c.id === channel.id);
                     this.channels.splice(currentIndex, 1);
                     this.channels.unshift(channel);
+                });
+
+                // Listen for message delete signals
+                this.socket.on(`TELL_CLIENTS_MESSAGE_IS_DELETED_${channel.id}`, (data) => {
+                    const markMessageAsDelete = (m) => {
+                        if (m.id === data.messageId) {
+                            m.deleted = true;
+                            m.content = null;
+                            m.user = null;
+                            m.attachment = null;
+                        }
+                    };
+                    channel.messages.forEach(markMessageAsDelete);
                 });
             }
         });
@@ -284,7 +310,7 @@ class HomeContainer extends Component {
                         showResultDataFromSearchBar={this.showResultDataFromSearchBar}
                     />
                 )}
-                {this.state.user && (
+                {this.state.user && this.state.selectedChannel && (
                     <MiddleContainer
                         key={this.state.refreshMiddleContainer}
                         channel={this.state.selectedChannel}

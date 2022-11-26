@@ -5,7 +5,7 @@ module.exports = async (db) => {
         name: "General"
     });
 
-    const second_generic_channel = await db.Channel.create({
+    const support_channel = await db.Channel.create({
         name: "Support"
     });
 
@@ -17,7 +17,7 @@ module.exports = async (db) => {
     });
 
     neoforum.addChannel(generic_channel);
-    neoforum.addChannel(second_generic_channel);
+    neoforum.addChannel(support_channel);
 
     const me = await db.User.create({
         username: 'thomas',
@@ -26,7 +26,7 @@ module.exports = async (db) => {
     });
 
     me.addChannel(generic_channel);
-    me.addChannel(second_generic_channel);
+    me.addChannel(support_channel);
 
     const first_message = await db.Message.create({
         content: `Welcome to Neoforum. 🚀 \n
@@ -44,7 +44,7 @@ module.exports = async (db) => {
 
     const third_message = await db.Message.create({
         content: `You faced a problem on the platform ? Please, write us. 🆘`,
-        channelId: second_generic_channel.id,
+        channelId: support_channel.id,
         userId: neoforum.id,
     });
 
