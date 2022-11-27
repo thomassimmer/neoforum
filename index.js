@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use(express.static(path.resolve(__dirname, './client/build')));
 
 app.use(
     fileUpload({
@@ -55,7 +55,6 @@ io.on('connection', (socket) => {
     registerMessageHandlers(io, socket);
 });
 
-
 require('./routes/auth.routes')(app);
 
 // What comes after need authentication
@@ -75,7 +74,7 @@ require('./routes/channel.routes')(app);
 
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
 
 http.listen(PORT, () => {
