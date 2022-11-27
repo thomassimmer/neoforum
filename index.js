@@ -4,6 +4,11 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authJwt = require('./middleware/authJwt');
+require('dotenv').config();
+
+var cloudinary = require('cloudinary').v2;
+
+cloudinary.config();
 
 const PORT = process.env.PORT || 3001;
 

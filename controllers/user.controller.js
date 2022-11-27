@@ -1,5 +1,6 @@
 const db = require("../models");
 const path = require("path");
+var cloudinary = require('cloudinary').v2;
 
 // GET index --> List all users
 exports.findAll = (req, res) => {
@@ -133,10 +134,11 @@ exports.uploadImage = async (req, res) => {
 
     let uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
 
-    image.mv(path.join(__dirname, '..', 'client/public/upload', uniqueId));
+    // Store the file on Cloudinary
+    const uploadedImage = await cloudinary.uploader.upload(image.tempFilePath, { public_id: uniqueId });
 
     const user = await db.User.findByPk(req.userId);
-    user.image = 'upload/' + uniqueId;
+    user.image = uploadedImage.url;
     await user.save();
 
     res.sendStatus(200);
