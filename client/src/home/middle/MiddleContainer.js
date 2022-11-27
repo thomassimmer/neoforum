@@ -5,10 +5,12 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from "@mui/icons-material/Search";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import $ from "jquery";
 
 import Message from './Message';
+import ChannelOptions from "./ChannelOptions";
 import { prepareHeaders } from "../../index";
 
 class MiddleContainer extends Component {
@@ -163,13 +165,50 @@ class MiddleContainer extends Component {
             channelName = this.state.channel.name;
         }
 
+        const showOptions = (e) => {
+            e.stopPropagation();
+
+            this.setState(state =>
+                Object.assign({}, state, {
+                    optionsAreVisible: !state.optionsAreVisible,
+                })
+            );
+
+            setTimeout(() => {
+                $(window).on('click', hideOptions);
+            }, 10);
+        }
+
+        const hideOptions = (e) => {
+            if (!$(e.target).parent('ul.channel-options-list').length) {
+                this.setState(state =>
+                    Object.assign({}, state, {
+                        optionsAreVisible: false,
+                    })
+                );
+                $(window).off('click', hideOptions);
+            }
+        };
+
         return (
             <div id="middle-container">
                 <header>
                     <IconButton className="open-left-container-btn">
                         <SearchIcon fontSize="large" style={{ color: 'white' }} />
                     </IconButton>
+                    <div className="useless-div-for-flex"></div>
                     <h1>{channelName}</h1>
+                    <MoreHorizIcon
+                        tabIndex="0"
+                        className={`channel-options${this.state.optionsAreVisible ? ' focus' : ''}`}
+                        onClick={showOptions}
+                        onKeyDown={showOptions}
+                    />
+                    {this.state.optionsAreVisible
+                        ? <ChannelOptions
+                            user={this.props.user}
+                            channel={this.state.channel} />
+                        : null}
                     <div className="user-image-container open-right-container-btn">
                         <img src={this.props.user.image} alt='' className="user-image"></img>
                     </div>

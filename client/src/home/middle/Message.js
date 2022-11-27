@@ -107,7 +107,7 @@ class Message extends Component {
         };
 
         if (this.props.message.deleted || !this.props.message.user) {
-            return <li className="deleted-message">Message deleted by its user.</li>;
+            return <li className="deleted-message">Message deleted by author.</li>;
         } else {
             return (
                 <li className="message">
@@ -118,9 +118,10 @@ class Message extends Component {
                             : <img src='default-user-img.png' alt='' className="user-image"></img>
                         }
                     </a>
-                    <div>
+                    <div className="container-username-date">
                         {/* TODO : Redirect toward conversation with this user */}
                         <a href="#" className="user-username">{this.props.message.user.username}</a>
+                        <span className="message-date">{new Date(Date.parse(this.props.message.user.createdAt)).toLocaleString()}</span>
                     </div>
                     <span className="message-content">{this.state.content}</span>
                     <MoreHorizIcon

@@ -1,12 +1,17 @@
 #middle-container {
     position: relative;
     width: 40%;
+    min-width: 475px;
     padding: 20px;
     border-right: solid gray 1px;
     border-left: solid gray 1px;
     box-shadow: rgb(0 0 0 / 25%) -3px 0px 10px, rgb(0 0 0 / 25%) 3px 0px 10px;
 
     header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         .open-left-container-btn,
         .open-right-container-btn {
@@ -68,8 +73,11 @@
         box-shadow: rgb(0 0 0 / 25%) 0px 1px 5px;
     }
 
-    .user-username {
+    .container-username-date {
         grid-area: a;
+    }
+
+    .user-username {
         color: #75a7ff;
         font-weight: bold;
         text-decoration: none;
@@ -81,6 +89,12 @@
         color: #377df9;
     }
 
+    .message-date {
+        font-size: 10px;
+        margin: 0 10px;
+        color: gray;
+    }
+
     .message-content {
         grid-area: c;
     }
@@ -89,6 +103,10 @@
         grid-area: e;
         position: relative;
         bottom: 10px;
+    }
+
+    .message-options,
+    .channel-options {
         width: 35px;
         color: gray;
         border-radius: 40px;
@@ -96,9 +114,44 @@
 
     .message-options:focus,
     .message-options:hover,
-    .message-options.focus {
+    .message-options.focus,
+    .channel-options:focus,
+    .channel-options:hover,
+    .channel-options.focus {
         background: #555555;
         color: white;
+    }
+
+    .message-options-list,
+    .channel-options-list {
+        position: absolute;
+        top: 40px;
+        background-color: #555555;
+        border-radius: 5px;
+        width: 120px;
+        padding: 5px;
+        list-style: none;
+        box-shadow: rgb(0 0 0 / 25%) 0px 1px 5px;
+        font-size: 16px;
+
+        li {
+            padding: 7px;
+            cursor: pointer;
+            ;
+
+            &:hover {
+                background-color: #353535;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .message-options-list {
+        right: 15px;
+    }
+
+    .channel-options-list {
+        right: 0px;
     }
 
     .message-field-container,
@@ -185,37 +238,13 @@
         left: 0;
         right: 0;
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        header .useless-div-for-flex {
+            display: none;
         }
 
         header .open-left-container-btn,
         header .open-right-container-btn {
             display: block;
-        }
-    }
-}
-
-.message-options-list {
-    position: absolute;
-    right: 15px;
-    top: 40px;
-    background-color: #555555;
-    border-radius: 5px;
-    width: 100px;
-    padding: 5px;
-    list-style: none;
-    box-shadow: rgb(0 0 0 / 25%) 0px 1px 5px;
-
-    li {
-        padding: 7px;
-        cursor: pointer;;
-
-        &:hover {
-            background-color: #353535;
-            border-radius: 5px;
         }
     }
 }
