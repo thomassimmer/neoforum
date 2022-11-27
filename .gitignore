@@ -1,7 +1,8 @@
 .env
 
-node_modules
+/node_modules
 
-client/public/upload/
+client/public/upload/*
+!client/public/upload
 
-public
+/public

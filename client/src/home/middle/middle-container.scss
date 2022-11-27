@@ -151,6 +151,7 @@
 
     .channel-options-list {
         right: 0px;
+        z-index: 1;
     }
 
     .message-field-container,
@@ -244,6 +245,15 @@
         header .open-left-container-btn,
         header .open-right-container-btn {
             display: block;
+        }
+
+        .container-username-date {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-date {
+            margin: 0;
         }
     }
 }
