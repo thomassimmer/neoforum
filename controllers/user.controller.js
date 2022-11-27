@@ -1,4 +1,5 @@
 const db = require("../models");
+const path = require("path");
 
 // GET index --> List all users
 exports.findAll = (req, res) => {
@@ -132,7 +133,7 @@ exports.uploadImage = async (req, res) => {
 
     let uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
 
-    image.mv(__dirname + '/../client/public/upload/' + uniqueId);
+    image.mv(path.join(__dirname, '..', 'client/public/upload', uniqueId));
 
     const user = await db.User.findByPk(req.userId);
     user.image = 'upload/' + uniqueId;
