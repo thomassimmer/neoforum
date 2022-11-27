@@ -47,14 +47,15 @@ exports.update = (req, res) => {
     });
 };
 
+// TODO: Make this available ?
 // DELETE --> Delete message based on his id
-exports.delete = (req, res) => {
-    const id = req.params.messageId;
-    Message.destroy({
-        where: { id: id },
-    }).then(() => {
-        res.status(200).send({ message: "deleted successfully a message with id = " + id });
-    }).catch((err) => {
-        console.log(">> Error while deleting message : ", err);
-    });
-};
+// exports.delete = (req, res) => {
+//     const id = req.params.messageId;
+//     Message.destroy({
+//         where: { id: id },
+//     }).then(() => {
+//         res.status(200).send({ message: "deleted successfully a message with id = " + id });
+//     }).catch((err) => {
+//         console.log(">> Error while deleting message : ", err);
+//     });
+// };

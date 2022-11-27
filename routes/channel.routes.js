@@ -14,7 +14,7 @@ module.exports = function (app) {
     app.put('/channels/:channelId', controller.update);
 
     // DELETE --> Delete channel based on his id
-    app.delete('/channels/:channelsId', controller.delete);
+    // app.delete('/channels/:channelsId', controller.delete);
 
     // GET private --> Get conversation of request user with given user
     app.get('/channels/private/:userId', controller.findPrivateChannelWithUser);

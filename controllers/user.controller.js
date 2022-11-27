@@ -102,14 +102,24 @@ exports.update = (req, res) => {
 
 // DELETE --> Delete user based on his id
 exports.delete = (req, res) => {
-    const id = req.params.userId;
-    db.User.destroy({
-        where: { id: id }
-    }).then(() => {
-        res.status(200).send({ message: 'deleted successfully a user with id = ' + id });
-    }).catch((err) => {
-        console.log(">> Error while deleting user : ", err);
-    });
+    const id = parseInt(req.params.userId, 10);
+
+    if (id === req.userId) {
+        db.User.destroy({
+            where: { id: id }
+        }).then(() => {
+            res.status(200).send({ message: 'deleted successfully a user with id = ' + id });
+        }).catch((err) => {
+            console.log(">> Error while deleting user : ", err);
+        });
+    } else {
+        console.log(`User ${req.userId} tried to remove user ${req.params.userId} but it's not him/her.`);
+        res.status(403).json({
+            errors: {
+                message: ['Unauthorized']
+            }
+        });
+    }
 };
 
 exports.uploadImage = async (req, res) => {

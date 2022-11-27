@@ -22,7 +22,7 @@ module.exports = (io, socket) => {
                     io.emit(`SEND_MESSAGE_TO_CLIENTS_${data.channelId}`, { message: message, user: user });
                 }
             } else {
-                console.log(`User ${data.userId} tried to create a message but the token used was not good.`);   
+                console.log(`User ${data.userId} tried to create a message but the token used was not good.`);
             }
         } catch (error) {
             console.log(error);

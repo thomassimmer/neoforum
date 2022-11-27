@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var bcrypt = require("bcryptjs");
 
 module.exports = async (db) => {
@@ -12,7 +14,7 @@ module.exports = async (db) => {
     const neoforum = await db.User.create({
         username: 'neoforum',
         email: 'neoforum@gmail.com',
-        password: bcrypt.hashSync('password', 8),
+        password: bcrypt.hashSync(process.env.PASSWORD_NEOFORUM, 8),
         image: 'neoforum-logo.png'
     });
 
@@ -22,7 +24,7 @@ module.exports = async (db) => {
     const me = await db.User.create({
         username: 'thomas',
         email: 'thomas@gmail.com',
-        password: bcrypt.hashSync('password', 8),
+        password: bcrypt.hashSync(process.env.PASSWORD_THOMAS, 8),
     });
 
     me.addChannel(generic_channel);

@@ -62,17 +62,18 @@ exports.update = (req, res) => {
     });
 };
 
+// TODO: Make this available.
 // DELETE --> Delete channel based on his id
-exports.delete = (req, res) => {
-    const id = req.params.channelId;
-    db.Channel.destroy({
-        where: { id: id }
-    }).then(() => {
-        res.status(200).send({ message: 'Deleted successfully a channel with id = ' + id });
-    }).catch((err) => {
-        console.log(">> Error while deleting channel : ", err);
-    });
-};
+// exports.delete = (req, res) => {
+//     const id = req.params.channelId;
+//     db.Channel.destroy({
+//         where: { id: id }
+//     }).then(() => {
+//         res.status(200).send({ message: 'Deleted successfully a channel with id = ' + id });
+//     }).catch((err) => {
+//         console.log(">> Error while deleting channel : ", err);
+//     });
+// };
 
 // GET --> Get conversation with user who has id equal to req.params.userId
 exports.findPrivateChannelWithUser = async (req, res) => {

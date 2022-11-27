@@ -14,5 +14,5 @@ module.exports = function (app) {
     app.put('/messages/:messageId', controller.update);
 
     // DELETE --> Delete message based on his id
-    app.delete('/messages/:messageId', controller.delete);
+    // app.delete('/messages/:messageId', controller.delete);
 }

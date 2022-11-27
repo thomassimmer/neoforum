@@ -12,7 +12,7 @@ const isAuthenticated = async (req, res, next) => {
             res.status(500).json({
                 errors: {
                     authentication: ["NoTokenError"]
-                } 
+                }
             });
         }
         const verify = await jwt.verify(token, config.secret);
