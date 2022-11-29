@@ -11,10 +11,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background-color: #282c34;
 
         .open-left-container-btn,
         .open-right-container-btn {
             display: none;
+            margin: 0 10px;
         }
 
         .user-image-container {
@@ -125,6 +127,7 @@
     .message-options-list,
     .channel-options-list {
         position: absolute;
+        z-index: 1;
         top: 40px;
         background-color: #555555;
         border-radius: 5px;
@@ -152,7 +155,6 @@
 
     .channel-options-list {
         right: 0px;
-        z-index: 1;
     }
 
     .message-field-container,
@@ -226,6 +228,14 @@
         visibility: visible;
         opacity: 1;
     }
+
+    footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
 }
 
 
@@ -238,23 +248,52 @@
         bottom: 0;
         left: 0;
         right: 0;
+        border: 0;
 
-        header .useless-div-for-flex {
-            display: none;
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            height: 100px;
+
+            .useless-div-for-flex {
+                display: none;
+            }
+
+            .open-left-container-btn,
+            .open-right-container-btn {
+                display: block;
+            }
+
+            .channel-options-list {
+                right: 5px;
+                top: 50px;
+            }
         }
 
-        header .open-left-container-btn,
-        header .open-right-container-btn {
-            display: block;
+        .list-message {
+            position: absolute;
+            top: 100px;
+            bottom: 100px;
+            margin: 0;
         }
 
         .container-username-date {
             display: flex;
             flex-direction: column;
+            row-gap: 5px;
         }
 
         .message-date {
             margin: 0;
+        }
+
+        footer {
+            height: 100px;
+            position: fixed;
+            background-color: #282c34;
         }
     }
 }

@@ -71,9 +71,11 @@ class RightContainer extends Component {
                         Log out
                     </Link>
                 </header>
-                <Link id="delete-account-link" href='#' onClick={this.deleteAccount} tabIndex="0">
-                    Delete my account
-                </Link>
+                <footer>
+                    <Link href='#' onClick={this.deleteAccount} tabIndex="0">Delete my account</Link>
+                    <Link href="https://github.com/thomassimmer/neoforum" target="_blank" tabIndex="0">Source</Link>
+                    <Link href="https://www.paypal.com/paypalme/ThomasSimmer" target="_blank" tabIndex="0">Support me</Link>
+                </footer>
             </div>
         );
     }

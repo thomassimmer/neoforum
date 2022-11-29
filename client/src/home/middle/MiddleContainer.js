@@ -222,35 +222,37 @@ class MiddleContainer extends Component {
                     :
                     <div className="no-message-yet">No message yet in here...</div>
                 }
-                {this.state.userAlreadyJoined ?
-                    <TextField
-                        id="message-field"
-                        label="Send a message"
-                        variant="outlined"
-                        className="message-field-container"
-                        value={this.state.message}
-                        onKeyDown={this.keyPress}
-                        onChange={this.keyPress}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton onClick={this.handleSendMessage}>
-                                        <SendIcon fontSize="large" style={{ color: 'rgb(25, 118, 210)' }} />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                    />
-                    :
-                    <Button
-                        variant="outlined"
-                        className="join-channel-container"
-                        fullWidth
-                        onClick={this.joinChannel}
-                    >
-                        Join this {this.state.channel.isPrivate ? 'conversation' : 'channel'}
-                    </Button>
-                }
+                <footer>
+                    {this.state.userAlreadyJoined ?
+                        <TextField
+                            id="message-field"
+                            label="Send a message"
+                            variant="outlined"
+                            className="message-field-container"
+                            value={this.state.message}
+                            onKeyDown={this.keyPress}
+                            onChange={this.keyPress}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <IconButton onClick={this.handleSendMessage}>
+                                            <SendIcon fontSize="large" style={{ color: 'rgb(25, 118, 210)' }} />
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                        :
+                        <Button
+                            variant="outlined"
+                            className="join-channel-container"
+                            fullWidth
+                            onClick={this.joinChannel}
+                        >
+                            Join this {this.state.channel.isPrivate ? 'conversation' : 'channel'}
+                        </Button>
+                    }
+                </footer>
             </div>
         );
     };

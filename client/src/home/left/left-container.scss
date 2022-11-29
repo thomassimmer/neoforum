@@ -131,6 +131,7 @@
         display: none;
         position: absolute;
         width: auto;
+        min-width: auto;
         z-index: 1;
         top: 0;
         left: 0;
@@ -140,6 +141,10 @@
         header .close-left-container-btn {
             display: block;
             height: 41px;
+        }
+
+        .MuiTextField-root label {
+            font-size: 14px;
         }
     }
 

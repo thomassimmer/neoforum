@@ -30,7 +30,7 @@ const MessageOptions = ({ user, message, seen, received, deleteMessage }) => {
                 </ul>
             </li>
             <li tabIndex="0" className="element-with-tooltip">
-                Viewed by...
+                Received by...
                 <ul className="tooltip">
                     {received && received.map((um, index) => {
                         return <li key={index}>{um.username}</li>;
